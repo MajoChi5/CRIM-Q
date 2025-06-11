@@ -5,26 +5,25 @@
 #include <string>
 using std::string;
 
-// Inheritance: Crime extends Reportable
+// Crime is a subclass that extends Reportable
 class Crime : public Reportable {
 protected:
-    string location;       // Specific to Crime: where it occurred
-    string dateFollowUp;   // When follow-up action was taken
-
+    string location;       // Where occurred the crime
+    string dateFollowUp;   // When follow-up action start or not 
 public:
-    // Constructor uses base for common attributes
+    // Constructor 
     Crime(const string& desc, const string& loc, const string& date);
 
-    // Overriding abstract method from Reportable
+    // Overriding the virtual method from Reportable
     void followUp() override;
 
     // Override base getStatus()
     virtual string getStatus() const override;
 
-    // Overload: optionally return follow-up date
+    // Overload to return follow-up date
     string getStatus(bool showDate) const;
 
-    // Operator Overloading: compare Crime descriptions
+    // Operator Overloading this is used to compare Crime descriptions (idea stole from a partner)
     bool operator==(const Crime& other) const;
 
     virtual ~Crime();
