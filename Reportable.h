@@ -4,7 +4,7 @@
 #include <string>
 using std::string;
 
-// Abstract Base Class: holds common attributes for all reports (superclass)
+// The superclass that inherit to Crime and also the abstract class for the system to be able to use polymorphism
 class Reportable {
 protected:
     string description;    // Description or type of report
@@ -12,24 +12,24 @@ protected:
     string status;         // "Pending", "Follow up", "Stand by", "Solved"
 
 public:
-    // Constructor initializes common attributes
+    // Constructor 
     Reportable(const string& desc, const string& date)
         : description(desc), dateReported(date), status("Pending") {}
 
-    // Pure virtual for specialized follow-up behavior (polymorphism)
+    // Pure virtual for specialized follow-up
     virtual void followUp() = 0;
 
-    // Virtual method for status; default returns status attribute
+    // Virtual method for status default returns status attribute
     virtual string getStatus() const { return status; }
 
-    // Accessors for common attributes
+    // Getters
     virtual string getType() const { return description; }
     virtual string getDateReported() const { return dateReported; }
 
-    // Allows subclasses or system to modify status
+    //Setters
     void setStatus(const string& newStatus) { status = newStatus; }
 
-    virtual ~Reportable() {}  // Virtual destructor for proper cleanup
+    virtual ~Reportable() {}  // Virtual destructor for memory 
 };
 
 #endif // REPORTABLE_H
