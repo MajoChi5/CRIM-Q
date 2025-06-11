@@ -15,12 +15,12 @@ string Crime::getStatus() const {
     return status;
 }
 
-// Operator overloading
+// Overload 
 string Crime::getStatus(bool showDate) const {
     return (status == "Follow up" && showDate) ? dateFollowUp : getStatus();
 }
 
-// Operator overloading: compare by description
+// Operator overloading compare descriptions
 bool Crime::operator==(const Crime& other) const {
     return description == other.description;
 }
