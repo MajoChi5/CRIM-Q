@@ -1,21 +1,21 @@
 #include "Crime.h"
 
-// Initialize Reportable(desc, date) and Crime-specific location
+// Constructor
 Crime::Crime(const string& desc, const string& loc, const string& date)
     : Reportable(desc, date), location(loc) {}
 
-// Overriding: set status and record follow-up date
+// Overriding to set status and record follow-up date
 void Crime::followUp() {
     status = "Follow up";
-    dateFollowUp = "2025-06-08"; // Example static follow-up date
+    dateFollowUp = "2025-06-08"; 
 }
 
-// Override: return current status
+// Override
 string Crime::getStatus() const {
     return status;
 }
 
-// Overload: optionally return follow-up date
+// Operator overloading
 string Crime::getStatus(bool showDate) const {
     return (status == "Follow up" && showDate) ? dateFollowUp : getStatus();
 }
