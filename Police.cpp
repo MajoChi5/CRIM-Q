@@ -9,7 +9,7 @@ void Police::assignCrime(Crime* crime) {
 }
 
 void Police::followUpCrime(Crime* crime) {
-    crime->followUp(); // Polymorphic call to Crime::followUp
+    crime->followUp(); 
 }
 
 void Police::updateCrimeStatus(Crime* crime, const string& newStatus) {
