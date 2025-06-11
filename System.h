@@ -8,7 +8,7 @@ class User;
 class Crime;
 class Police;
 
-// Orchestrates users and crime records
+//Pointers to users and crimes
 class System {
 private:
     vector<User*> users;
