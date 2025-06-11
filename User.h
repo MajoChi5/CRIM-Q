@@ -6,9 +6,9 @@
 using std::string;
 using std::vector;
 
-class Crime; // forward declaration
+class Crime; //The Crime declaration is made in User.h to declare vector<Crime*> reports; without needing to include the Crime.h file
 
-// Base for Citizen and Police (holds user identity and reports)
+
 class User {
 protected:
     string name;
@@ -20,7 +20,7 @@ public:
     void reportCrime(Crime* crime);    // Submit a crime report
     const vector<Crime*>& getReports() const;
     string getName() const;
-    virtual ~User();   // Clean up reported crimes
+    virtual ~User();   // Clean up reported crimes so it is a destructor 
 };
 
 #endif // USER_H
