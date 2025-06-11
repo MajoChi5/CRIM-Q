@@ -1,3 +1,4 @@
 # CRIM-Q
 CRIM-Q is supposed to be an organization and reporting system for the Querétaro state police, so the can see any tipe of crimes that the society reports, also it helps to the transparency system because the people can see if they report is already being followed up, in addition to being able to see the other complaints and the date the police began following them up, in addition to improving the organization, this will allow citizens to contribute to public safety in the state of Querétaro and later an application can be developed for faster access.
+This proyect is going to work with Polimorphism, inheritance, operator overloading, overwriting, overloading and pointers because its also working with abstract classes. 
 
