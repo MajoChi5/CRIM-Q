@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <string>
+#include <limits>
 #include "System.h"
 #include "User.h"
 #include "Police.h"
@@ -10,58 +12,88 @@ using namespace std;
 int main() {
     System crimq;
 
-    // Create users using dynamic allocation (pointers)
-    User* citizen = new User("Juan Perez", "juan@email.com");
-    Police* officer1 = new Police("Jose Perez", "jperez@police.qro");
-    Police* officer2 = new Police("Maria Lopez", "mlopez@police.qro");
-    Police* officer3 = new Police("Carlos Ruiz", "cruiz@police.qro");
-
-    // Register users in the system
+    // Create a default citizen and police officers
+    User* citizen = new User("User", "user@example.com");
+    Police* officer1 = new Police("Officer Jose Perez", "jperez@police.qro");
+    Police* officer2 = new Police("Officer Maria Lopez", "mlopez@police.qro");
     crimq.addUser(citizen);
     crimq.addUser(officer1);
     crimq.addUser(officer2);
-    crimq.addUser(officer3);
+    vector<Police*> officers = { officer1, officer2 };
 
-    // Create Crime instances
-    Crime* c1 = new Crime("Assault", "Centro", "2025-12-05");
-    Crime* c2 = new Crime("Vandalism", "Parque Sur", "2025-12-06");
-    Crime* c3 = new Crime("Cyberbullying", "Querétaro", "2025-12-07");
+    vector<Crime*> allCrimes;
+    int choice;
+    do {
+        cout << "\n--- CRIM-Q Menu ---\n";
+        cout << "1. Report a crime\n";
+        cout << "2. Assign crime to officer\n";
+        cout << "3. Follow up on a crime\n";
+        cout << "4. Show all crime statuses\n";
+        cout << "5. Exit\n";
+        cout << ">> ";
+        cin >> choice;
 
-    // Citizen reports crimes
-    citizen->reportCrime(c1);
-    citizen->reportCrime(c2);
-    citizen->reportCrime(c3);
-
-    // System records crimes
-    crimq.addCrime(c1);
-    crimq.addCrime(c2);
-    crimq.addCrime(c3);
-
-    // Assign and follow-up (polymorphism via virtual)
-    crimq.assignToPolice(officer1, c1);
-    crimq.assignToPolice(officer2, c2);
-    crimq.assignToPolice(officer3, c3);
-
-    officer1->followUpCrime(c1);
-    officer2->followUpCrime(c2);
-    officer3->followUpCrime(c3);
-
-    // Update statuses (overloading via setStatus)
-    officer1->updateCrimeStatus(c1, "Solved");
-    officer2->updateCrimeStatus(c2, "Stand by");
-    // officer3 remains "Follow up"
-
-    // Print formatted output (only in main)
-    vector<Police*> officers = { officer1, officer2, officer3 };
-    for (Police* off : officers) {
-        for (Crime* crime : off->getAssignedCrimes()) {
-            cout << "Crime: " << crime->getType() << endl;
-            cout << "Upload: " << crime->getDateReported() << endl;
-            cout << "Officer: " << off->getName() << endl;
-            cout << "Status: " << crime->getStatus() << endl;
-            cout << "-----------------------------" << endl;
+        if (choice == 1) {
+            string desc, loc, date;
+            cout << "Description: ";
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            getline(cin, desc);
+            cout << "Location: ";
+            getline(cin, loc);
+            cout << "Date (YYYY-MM-DD): ";
+            getline(cin, date);
+            Crime* crime = new Crime(desc, loc, date);
+            citizen->reportCrime(crime);
+            crimq.addCrime(crime);
+            allCrimes.push_back(crime);
+            cout << "Crime reported.\n";
+        } else if (choice == 2) {
+            if (allCrimes.empty()) {
+                cout << "No crimes to assign.\n";
+                continue;
+            }
+            cout << "Select crime (0-" << allCrimes.size()-1 << "): ";
+            size_t idx;
+            cin >> idx;
+            cout << "Select officer (1: Jose, 2: Maria): ";
+            int o;
+            cin >> o;
+            Police* selected = (o == 1 ? officer1 : officer2);
+            crimq.assignToPolice(selected, allCrimes[idx]);
+            cout << "Crime assigned to " << selected->getName() << ".\n";
+        } else if (choice == 3) {
+            cout << "Select officer for follow-up (1: Jose, 2: Maria): ";
+            int o;
+            cin >> o;
+            Police* selected = (o == 1 ? officer1 : officer2);
+            const auto& assigned = selected->getAssignedCrimes();
+            if (assigned.empty()) {
+                cout << "No crimes assigned to this officer.\n";
+                continue;
+            }
+            cout << "Select assigned crime (0-" << assigned.size() << "): ";
+            size_t idx;
+            cin >> idx;
+            selected->followUpCrime(assigned[idx]);
+            cout << "Follow-up completed.\n";
+        } else if (choice == 4) {
+            cout << "\nAll crime statuses:\n";
+            for (Police* off : officers) {
+                for (Crime* crime : off->getAssignedCrimes()) {
+                    cout << "Crime: " << crime->getType()
+                         << ", Status: " << crime->getStatus()
+                         << ", Officer: " << off->getName() << "\n";
+                }
+            }
         }
-    }
+    } while (choice != 5);
 
+    // Cleanup
+    delete citizen;
+    delete officer1;
+    delete officer2;
+    for (Crime* crime : allCrimes) {
+        delete crime;
+    }
     return 0;
 }
